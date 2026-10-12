@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Bangladesh Passport Maker</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#e9f5ee;--ink:#17332a;--card:#fff;--line:#cfe3d8;--g:#006a4e;--r:#f42a41;--b:#1d4e9e;--paper:#f7f1dc}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1d17;--ink:#e7f3ec;--card:#16291f;--line:#2b4a3b}}
+:root[data-theme="dark"]{--bg:#0e1d17;--ink:#e7f3ec;--card:#16291f;--line:#2b4a3b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*,*:before,*:after{box-sizing:inherit}
+body{margin:0;padding:16px;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Bengali",sans-serif}
+.wrap{max-width:520px;margin:0 auto}h1{font-size:22px;margin:4px 0 2px}.sub{opacity:.7;font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px;opacity:.8}
+input,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:14px;padding:12px 16px;font-weight:700;font-size:15px;color:#fff;background:var(--g);cursor:pointer;width:100%}
+.btn.r{background:var(--r)}.btn.b{background:var(--b)}.btn.mini{padding:7px 10px;font-size:12px;width:auto;border-radius:10px;background:var(--b)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;max-height:170px;overflow:auto;margin-top:8px}
+.chip{padding:5px 10px;border-radius:99px;border:1px solid var(--line);font-size:12px;cursor:pointer;background:var(--bg)}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}.bar select{flex:1;min-width:140px}.bar .btn{width:auto;flex:1}
+.cover{background:linear-gradient(145deg,var(--pc),var(--pd));border:3px solid #d9b45a;border-radius:18px;text-align:center;color:#e9c46a;padding:26px 10px;margin-bottom:14px;box-shadow:0 8px 20px #0003}
+.cover .em{width:70px;height:70px;border-radius:50%;margin:10px auto;border:3px solid #e9c46a;display:grid;place-items:center}.cover .em i{width:34px;height:34px;border-radius:50%;background:var(--ac);display:block}
+.cover b{letter-spacing:4px;font-size:22px}.cover small{display:block;letter-spacing:2px;font-size:11px}
+#book{display:flex;flex-direction:column;gap:12px;padding:6px;background:var(--bg)}
+.pg{position:relative;border-radius:18px;overflow:hidden;color:#173b2f;border:1px solid #cdbf8c;box-shadow:0 6px 16px #0002;background:radial-gradient(circle at 88% 22%,#f42a4120 0 54px,transparent 55px),repeating-radial-gradient(circle at 15% 85%,#006a4e12 0 2px,transparent 2px 8px),var(--paper)}
+.pg:before{content:"";display:block;height:6px;background:linear-gradient(90deg,var(--g) 0 45%,var(--r) 45% 70%,var(--b) 70%)}
+.band{background:var(--pc);color:#fff;text-align:center;padding:9px 8px}.band b{font-size:10px;letter-spacing:1px;display:block}.band span{font-size:12px}
+.pad{padding:12px}.top{display:flex;gap:12px}.ph{width:104px;height:132px;border-radius:12px;border:3px solid var(--pc);background:#dfe9d8 center/cover;display:grid;place-items:center;font-size:40px;flex:none}
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;flex:1;min-width:0}.fl div{min-width:0}.fl small{display:block;font-size:8px;color:var(--pc);font-weight:700;letter-spacing:.5px}.fl b{font-size:12px;word-break:break-word}.w2{grid-column:1/-1}
+.codes{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.codes canvas{max-width:62%;height:auto}
+.qr{flex:none;line-height:0}.qr canvas{display:block;width:96px;height:96px;max-width:none;image-rendering:pixelated;border-radius:8px}.codes #bc{border-radius:8px}
+.mrz{font:600 11px/1.5 "Courier New",monospace;letter-spacing:.5px;margin-top:8px;background:#fffbea;border-radius:8px;padding:6px;overflow:hidden;white-space:nowrap}
+.vt{text-align:center;color:var(--pc);font-weight:800;letter-spacing:2px;font-size:13px;padding:10px 0 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.visa{border:2px dashed #b9ad7d;border-radius:14px;padding:8px;background:#fffdf1b0;min-height:178px;display:flex;flex-direction:column}
+.vh{display:flex;justify-content:space-between;gap:4px;align-items:center}.vh b{font-size:13px}
+.tag{font-size:8px;font-weight:800;border-radius:99px;padding:2px 6px;color:#fff}.tag.go{background:var(--b)}.tag.ok{background:var(--g)}
+.visa small{font-size:9px;opacity:.7}.slot{flex:1;display:grid;place-items:center}.empty{font-size:10px;opacity:.4;border:1px dashed #b9ad7d;border-radius:50%;width:78px;height:78px;display:grid;place-items:center;text-align:center}
+.seal{width:96px;height:96px;transform:rotate(var(--rot));opacity:.9}
+.seal.drop{animation:thud .85s cubic-bezier(.2,.8,.2,1.2)}
+@keyframes thud{0%{transform:rotate(calc(var(--rot) + 40deg)) scale(3.2);opacity:0}50%{transform:rotate(var(--rot)) scale(.9);opacity:1}72%{transform:rotate(var(--rot)) scale(1.06)}100%{transform:rotate(var(--rot)) scale(1)}}
+.shot .noshot{display:none!important}
+#app{--pc:#006a4e;--pd:#004d38;--ac:#f42a41}#app[data-th=r]{--pc:#d62839;--pd:#8f1423;--ac:#1d4e9e}#app[data-th=b]{--pc:#1d4e9e;--pd:#12336b;--ac:#f42a41}
+label.ck{display:flex;align-items:center;gap:8px;font-size:12px}.ck input{width:auto}
+.sw{display:flex;gap:10px;margin-top:4px;align-items:center}.sw label{margin:0;cursor:pointer}.sw input{display:none}.sw label span{display:block;width:40px;height:40px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 1px #0003}.sw input:checked+span{border-color:var(--ink);transform:scale(1.1)}
+</style></head><body><div class="wrap">
+<h1>🛂 Wayfarer Passport Maker</h1><p class="sub">Enter your details, pick destinations from all 64 districts, and download your passport.</p>
+<form id="f" class="card">
+<div class="two"><div><label>Surname</label><input id="sn" required></div><div><label>Given name(s)</label><input id="gn" required></div></div>
+<div class="two"><div><label>Father's name (optional)</label><input id="fa"></div><div><label>Mother's name (optional)</label><input id="mo"></div></div>
+<div class="two"><div><label>Date of birth</label><input id="dob" type="date" required></div><div><label>Sex</label><select id="sex"><option>M</option><option>F</option><option>X</option></select></div></div>
+<div class="two"><div><label>Profession</label><input id="job" required></div><div><label>Home district</label><select id="bd" required></select></div></div>
+<label class="ck" id="hpw" style="display:none"><input type="checkbox" id="hp"> Hide parents' names on my passport 🔒 (safe for social media)</label><div class="two"><div><label>Validity</label><select id="val"><option value="10">10 years</option><option value="5">5 years</option></select></div><div><label>Passport color</label><div class="sw"><label><input type="radio" name="th" value="g" checked><span style="background:#006a4e"></span></label><label><input type="radio" name="th" value="r"><span style="background:#d62839"></span></label><label><input type="radio" name="th" value="b"><span style="background:#1d4e9e"></span></label></div></div></div><label>Photo</label><input id="ph" type="file" accept="image/*">
+<label>Travel destinations (select multiple districts)</label><input id="q" placeholder="Search district...">
+<div class="chips" id="chips"></div>
+<button class="btn" style="margin-top:14px">Create my passport ✈️</button></form>
+<div id="app"></div></div>
+<script>
+const D="Bagerhat,Bandarban,Barguna,Barishal,Bhola,Bogura,Brahmanbaria,Chandpur,Chapainawabganj,Chattogram,Chuadanga,Cumilla,Cox's Bazar,Dhaka,Dinajpur,Faridpur,Feni,Gaibandha,Gazipur,Gopalganj,Habiganj,Jamalpur,Jashore,Jhalokathi,Jhenaidah,Joypurhat,Khagrachhari,Khulna,Kishoreganj,Kurigram,Kushtia,Lakshmipur,Lalmonirhat,Madaripur,Magura,Manikganj,Meherpur,Moulvibazar,Munshiganj,Mymensingh,Naogaon,Narail,Narayanganj,Narsingdi,Natore,Netrokona,Nilphamari,Noakhali,Pabna,Panchagarh,Patuakhali,Pirojpur,Rajbari,Rajshahi,Rangamati,Rangpur,Satkhira,Shariatpur,Sherpur,Sirajganj,Sunamganj,Sylhet,Tangail,Thakurgaon".split(",");
+const $=s=>document.querySelector(s),sel=new Set();let P=null,photo="";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>d.toISOString().slice(0,10),today=()=>iso(new Date());
+const fmt=d=>new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).toUpperCase();
+const save=()=>{try{localStorage.setItem("bdpp",JSON.stringify(P))}catch(e){}};
+$("#bd").innerHTML='<option value="" disabled selected>Select district</option>'+D.map(d=>`<option>${esc(d)}</option>`).join("");
+function chips(){const q=$("#q").value.toLowerCase();$("#chips").innerHTML=D.filter(d=>d.toLowerCase().includes(q)).map(d=>`<span class="chip ${sel.has(d)?"on":""}" data-d="${esc(d)}">${esc(d)}</span>`).join("")}
+$("#q").oninput=chips;$("#chips").onclick=e=>{const d=e.target.dataset.d;if(d){sel.has(d)?sel.delete(d):sel.add(d);chips()}};chips();
+["fa","mo"].forEach(i=>$("#"+i).oninput=()=>{const on=$("#fa").value.trim()||$("#mo").value.trim();$("#hpw").style.display=on?"flex":"none";if(!on)$("#hp").checked=false});
+$("#ph").onchange=e=>{const r=new FileReader();r.onload=()=>photo=r.result;e.target.files[0]&&r.readAsDataURL(e.target.files[0])};
+const mk=d=>({id:Math.random().toString(36).slice(2,8),d,date:today(),done:false,end:"",rot:Math.round(Math.random()*30-15),c:Math.random()<.5?"r":"b"});
+$("#f").onsubmit=e=>{e.preventDefault();const x=new Date();x.setFullYear(x.getFullYear()+Number($("#val").value));
+P={no:"A"+String(Date.now()).slice(-5)+(Math.floor(Math.random()*900)+100),sn:$("#sn").value.trim(),gn:$("#gn").value.trim(),fa:$("#fa").value.trim(),mo:$("#mo").value.trim(),dob:$("#dob").value,sex:$("#sex").value,job:$("#job").value.trim(),bd:$("#bd").value,photo,issue:today(),exp:iso(x),th:document.querySelector('input[name=th]:checked').value,hp:$("#hp").checked,trips:[...sel].map(mk)};
+save();render();scrollTo(0,0)};
+const seal=t=>{const c=t.c=="r"?"#d62839":"#1d4e9e",i=t.id,n=t.d.toUpperCase(),fs=n.length>11?7.5:n.length>8?9:11;
+return `<svg class="seal ${P.fresh==t.id?"drop":""}" viewBox="0 0 120 120" style="--rot:${t.rot}deg;color:${c}"><defs><path id="t${i}" d="M20 60a40 40 0 0 1 80 0"/><path id="b${i}" d="M14 60a46 46 0 0 0 92 0"/></defs><circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-dasharray="2 2"/><circle cx="60" cy="60" r="33" fill="none" stroke="currentColor" stroke-width="1.5"/><g fill="currentColor" font-weight="700" text-anchor="middle" font-family="Arial,sans-serif"><text font-size="${fs}" letter-spacing="1"><textPath href="#t${i}" startOffset="50%">${esc(n)}</textPath></text><text font-size="7.5" letter-spacing="1"><textPath href="#b${i}" startOffset="50%">TRIP COMPLETED</textPath></text><text x="60" y="54" font-size="8">ARRIVED</text><text x="60" y="66" font-size="6.5">${fmt(t.end)}</text><text x="60" y="78" font-size="9">★ BD ★</text></g></svg>`};
+const visa=t=>`<div class="visa"><div class="vh"><b>${esc(t.d)}</b><span class="tag ${t.done?"ok":"go"}">${t.done?"FINISHED":"ON TRIP"}</span></div><small>ENTRY ${fmt(t.date)}</small><div class="slot">${t.done?seal(t):'<div class="empty">stamp<br>area</div>'}</div>${t.done?"":`<button class="btn mini noshot" data-fin="${t.id}">✔ Trip finished</button>`}</div>`;
+function drawQR(el,t){const q=qrcode(0,"M");q.addData(t);q.make();const n=q.getModuleCount(),m=4,s=8,c=document.createElement("canvas");c.width=c.height=(n+2*m)*s;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.fillStyle="#000";for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(q.isDark(r,k))x.fillRect((k+m)*s,(r+m)*s,s,s);el.innerHTML="";el.appendChild(c)}
+const F=(l,v,c="")=>`<div class="${c}"><small>${l}</small><b>${esc(v)}</b></div>`;
+function render(){$("#f").style.display="none";$("#app").dataset.th=P.th||"g";const p=P,pad=(s,n)=>(s+"<".repeat(n)).slice(0,n),z=s=>s.toUpperCase().replace(/[^A-Z0-9]+/g,"<"),yy=d=>d.slice(2,4)+d.slice(5,7)+d.slice(8,10);
+const m1=pad("WYF<BGD"+z(p.sn)+"<<"+z(p.gn),44),m2=pad(p.no+"<BGD"+yy(p.dob)+"<"+p.sex+yy(p.exp)+"<",44);
+$("#app").innerHTML=`<div class="cover"><small>BANGLADESH EXPLORER</small><div class="em"><i></i></div><b>PASSPORT</b><small>WAYFARER EDITION · NOT OFFICIAL</small></div>
+<div class="bar"><select id="add"><option value="" disabled selected>Choose a district</option>${D.map(d=>`<option>${esc(d)}</option>`).join("")}</select><button class="btn b" data-act="add">+ Add trip</button></div><div class="sw" style="margin-bottom:12px"><span style="font-size:12px;font-weight:600">Color:</span><button data-th="g" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);background:#006a4e;cursor:pointer"></button><button data-th="r" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);background:#d62839;cursor:pointer"></button><button data-th="b" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);background:#1d4e9e;cursor:pointer"></button></div>
+<div id="book"><div class="pg" id="pg1"><div class="band"><b>WAYFARER PASSPORT · BANGLADESH EDITION</b><span>FOR ADVENTURE ONLY · NOT AN OFFICIAL DOCUMENT</span></div><div class="pad"><div class="top"><div class="ph" style="${p.photo?`background-image:url(${p.photo})`:""}">${p.photo?"":"🧑"}</div><div class="fl">${F("TYPE","WYF")}${F("CODE","BGD")}${F("PASSPORT NO.",p.no,"w2")}${F("SURNAME",p.sn,"w2")}${F("GIVEN NAMES",p.gn,"w2")}${F("NATIONALITY","BANGLADESHI","w2")}</div></div>
+<div class="fl" style="grid-template-columns:1fr 1fr 1fr;margin-top:8px">${F("DATE OF BIRTH",fmt(p.dob))}${F("SEX",p.sex)}${F("PLACE OF BIRTH",p.bd)}${F("FATHER",p.fa?(p.hp?"HIDDEN 🔒":p.fa):"—")}${F("MOTHER",p.mo?(p.hp?"HIDDEN 🔒":p.mo):"—")}${F("PROFESSION",p.job)}${F("DATE OF ISSUE",fmt(p.issue))}${F("DATE OF EXPIRY",fmt(p.exp))}${F("ISSUED BY","WAYFARER HQ")}</div>
+<div class="codes"><canvas id="bc"></canvas><div class="qr" id="qr"></div></div><div class="mrz">${esc(m1)}<br>${esc(m2)}</div></div></div>
+<div class="pg" id="pg2"><div class="vt">TRAVEL RECORD · ${p.trips.length} TRIP${p.trips.length==1?"":"S"}</div><div class="grid">${p.trips.length?p.trips.map(visa).join(""):'<p style="grid-column:1/-1;text-align:center;opacity:.6;font-size:13px">No trips yet. Add a district above ✈️</p>'}</div></div></div>
+<div class="bar" style="margin-top:12px"><select id="dw"><option value="both">Passport + travel record</option><option value="p1">Passport page only</option><option value="p2">Travel record only</option></select><select id="df"><option value="png">PNG image</option><option value="pdf">PDF file</option></select></div>
+<div class="bar">${p.fa||p.mo?`<button class="btn b" data-act="hp">${p.hp?"Show":"Hide"} parents' names 🔒</button>`:""}<button class="btn" data-act="dl">⬇ Download</button><button class="btn r" data-act="new">New passport</button></div>`;
+try{JsBarcode("#bc",p.no,{format:"CODE128",height:46,fontSize:13,margin:8,marginBottom:6,background:"#ffffff",lineColor:"#000000"})}catch(e){}
+try{drawQR($("#qr"),`WAYFARER ${p.no} ${p.sn} ${p.gn}`.slice(0,60))}catch(e){}
+P.fresh=null}
+$("#app").onclick=async e=>{const b=e.target.closest("button");if(!b)return;
+if(b.dataset.act=="hp"){P.hp=!P.hp;save();render()}
+else if(b.dataset.th){P.th=b.dataset.th;save();render()}
+else if(b.dataset.fin){const t=P.trips.find(x=>x.id==b.dataset.fin);t.done=true;t.end=today();P.fresh=t.id;save();render()}
+else if(b.dataset.act=="add"){if(!$("#add").value)return alert("Please select a district first");P.trips.push(mk($("#add").value));save();render()}
+else if(b.dataset.act=="new"){if(confirm("Create a new passport? This will erase the current one.")){try{localStorage.removeItem("bdpp")}catch(e){}location.reload()}}
+else if(b.dataset.act=="dl"){const el=$("#book"),w=$("#dw").value,f=$("#df").value;el.classList.add("shot");b.textContent="Preparing...";
+try{const els=w=="p1"?[$("#pg1")]:w=="p2"?[$("#pg2")]:f=="pdf"?[$("#pg1"),$("#pg2")]:[el],cvs=[];for(const e of els)cvs.push(await html2canvas(e,{scale:2,backgroundColor:f=="pdf"?"#ffffff":null}));
+const name=`wayfarer-passport-${P.no}${w=="p1"?"-passport":w=="p2"?"-travel-record":""}.${f}`;let blob;
+if(f=="pdf"){const {jsPDF}=window.jspdf,sz=c=>[c.width/2,c.height/2],or=c=>c.width>c.height?"l":"p",d=new jsPDF({unit:"px",format:sz(cvs[0]),orientation:or(cvs[0]),hotfixes:["px_scaling"]});cvs.forEach((c,i)=>{if(i)d.addPage(sz(c),or(c));d.addImage(c.toDataURL("image/png"),"PNG",0,0,sz(c)[0],sz(c)[1])});blob=d.output("blob")}else blob=await new Promise(r=>cvs[0].toBlob(r,"image/png"));
+const dl=window.claude?await claude.use("downloads"):null;if(dl){await dl.save({filename:name,data:blob})}else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click()}}
+catch(err){if(!err||err.code!="declined")alert("Download failed, please try again.")}
+el.classList.remove("shot");b.textContent="⬇ Download"}};
+try{const s=localStorage.getItem("bdpp");if(s){P=JSON.parse(s);render()}}catch(e){}
+</script></body></html>
